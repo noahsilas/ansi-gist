@@ -1,3 +1,5 @@
+* { box-sizing: border-box; }
+
 /* Thanks Solarized for nice colors
    https://ethanschoonover.com/solarized/
  */
@@ -40,6 +42,8 @@ html {
     "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
     "Helvetica Neue", Arial, sans-serif;
 }
+
+body { margin: 0; }
 
 a { color: var(--blue); }
 
