@@ -66,6 +66,16 @@ code {
   max-width: 60rem;
 }
 
+.controls {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  user-select: none;
+}
+
+#back { text-decoration: none; }
+#back:not([data-hash]) { display: none; }
+
 </style>
 <script>
 function replacePrefix(str, prefix, replacement) {
@@ -107,11 +117,15 @@ window.addEventListener('hashchange', (evt) => {
   }
 
   load(window.location.hash.slice(1));
+  $back = document.getElementById('back');
+  $back.setAttribute('data-hash', window.location.hash)
 })
 
 window.addEventListener('load', () => {
   if (window.location.hash) {
     load(window.location.hash.slice(1));
+    $back = document.getElementById('back');
+    $back.setAttribute('data-hash', window.location.hash)
   }
 
   gistUrl.focus();
@@ -142,6 +156,10 @@ window.addEventListener('load', () => {
       <button>Go</button>
     </form>
   </div>
+</div>
+<div class="controls">
+  <a href="#" id="back">&#x1f519;</a>
+</div>
 </div>
 </body>
 </html>
