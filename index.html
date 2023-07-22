@@ -1,5 +1,6 @@
 <html>
 <head>
+<title>Colorize Gist</title>
 <meta name="color-scheme" content="dark light">
 <style>
 /* Thanks Solarized for nice colors
@@ -110,6 +111,8 @@ function load(url) {
     $err.innerHTML = 'Not a Gist URL';
     return;
   }
+
+  document.title = `Colorize gist - ${url}`
 
   fetch(rawUrl).then(response => response.text()).then((content) => {
     const value = content
