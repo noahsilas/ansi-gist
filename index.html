@@ -6,8 +6,10 @@
  */
 :root {
   --base03: #002b36;
+  --base02: #073642;
   --base00: #657b83;
   --base0: #839496;
+  --base2: #eee8d5;
   --base3: #fdf6e3;
   --red: #dc322f;
   --blue: #268bd2;
@@ -16,12 +18,14 @@
 
   /* default dark */
   --background: var(--base03);
+  --background-highlight: var(--base02);
   --body-text: var(--base0);
 }
 
 @media (prefers-color-scheme: light) {
   :root {
     --background: var(--base3);
+    --background-highlight: var(--base2);
     --body-text: var(--base00);
   }
 }
@@ -40,11 +44,25 @@ html {
     "Helvetica Neue", Arial, sans-serif;
 }
 
-pre {
+a { color: var(--blue); }
+
+code, pre {
   /* Nice font via: https://qwtel.com/posts/software/the-monospaced-system-ui-css-font-stack/ */
   font-family: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
     "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
     "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+}
+
+code {
+  display: block;
+  margin: 1rem;
+  padding: 1rem;
+  background-color: var(--background-highlight);
+}
+
+.instructions {
+  margin: auto;
+  max-width: 60rem;
 }
 
 </style>
@@ -100,11 +118,23 @@ window.addEventListener('load', () => {
 </head>
 <body>
 <div id="app">
-  <h2>ANSI Escape Code color renderer</h2>
-  <form id="form">
-    <label>Gist URL<br><input id="gistUrl" name="gistUrl" /></label>
-    <button>Go</button>
-  </form>
+  <div class="instructions">
+    <h2>ANSI escape code color renderer</h2>
+    <p>
+      Using the <a href="https://cli.github.com/">Github CLI</a>, capture the output
+      you want to share into a gist:
+    </p>
+    <code>
+      <span class="green">$</span> some-command | gh gist create -
+    </code>
+    <p>
+      Then paste that gist's URL below.
+    </p>
+    <form id="form">
+      <label>Gist URL<br><input id="gistUrl" name="gistUrl" /></label>
+      <button>Go</button>
+    </form>
+  </div>
 </div>
 </body>
 </html>
