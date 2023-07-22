@@ -82,17 +82,23 @@ function replacePrefix(str, prefix, replacement) {
   return str.startsWith(prefix) ? `${replacement}${str.slice(prefix.length)}` : str;
 }
 
-function load(url) {
-  // convert to "raw" github URL
+// convert to "/raw" github URL - hosted on a different domain with permissive CORS
+function rawGistUrl(url) {
   url = replacePrefix(url, 'https://gist.github.com', 'https://gist.githubusercontent.com')
+  if (!url.startsWith('https://gist.githubusercontent.com')) { return null; }
   if (!url.includes('/raw')) { url += '/raw' }
+  return url;
+}
 
-  if (!url.startsWith('https://gist.githubusercontent.com')) {
+function load(url) {
+  const rawUrl = rawGistUrl(url);
+
+  if (!rawUrl) {
     console.log('Bad URL', url);
     return;
   }
 
-  fetch(url).then(response => response.text()).then((content) => {
+  fetch(rawUrl).then(response => response.text()).then((content) => {
     const $app = document.getElementById('app');
 
     const value = content
