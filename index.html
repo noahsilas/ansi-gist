@@ -81,6 +81,11 @@ code {
 #back { text-decoration: none; }
 #back:not([data-hash]) { display: none; }
 
+#error {
+  color: var(--red);
+  margin: .25rem 0;
+}
+
 </style>
 <script>
 function replacePrefix(str, prefix, replacement) {
@@ -101,7 +106,8 @@ function load(url) {
   const rawUrl = rawGistUrl(url);
 
   if (!rawUrl) {
-    console.log('Bad URL', url);
+    const $err = document.getElementById('error');
+    $err.innerHTML = 'Not a Gist URL';
     return;
   }
 
@@ -166,6 +172,7 @@ window.addEventListener('load', () => {
     <form id="form">
       <label>Gist URL<br><input id="gistUrl" name="gistUrl" /></label>
       <button>Go</button>
+      <div id="error"></div>
     </form>
   </div>
 </div>
