@@ -57,6 +57,10 @@ code {
   background-color: var(--background-highlight);
 }
 
+section + section {
+  margin-top: 2rem;
+}
+
 .instructions {
   margin: auto;
   max-width: 60rem;

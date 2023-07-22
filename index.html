@@ -76,22 +76,33 @@ window.addEventListener('load', () => {
 <div id="app">
   <div id="gistContent"></div>
   <div class="instructions">
-    <h2>ANSI escape code color renderer</h2>
-    <p>
-      Using the <a href="https://cli.github.com/">Github CLI</a>, capture the output
-      you want to share into a gist:
-    </p>
-    <code>
-      <span class="green">$</span> some-command | gh gist create -
-    </code>
-    <p>
-      Then paste that gist's URL below.
-    </p>
-    <form id="form">
-      <label>Gist URL<br><input id="gistUrl" name="gistUrl" /></label>
-      <button>Go</button>
-      <div id="error"></div>
-    </form>
+    <section>
+      <h2>ANSI escape code color renderer</h2>
+      <p>
+        Using the <a href="https://cli.github.com/">Github CLI</a>, capture the output
+        you want to share into a gist:
+      </p>
+      <code>
+        <span class="green">$</span> some-command | gh gist create -
+      </code>
+      <p>
+        Then paste that gist's URL below.
+      </p>
+      <form id="form">
+        <label>Gist URL<br><input id="gistUrl" name="gistUrl" /></label>
+        <button>Go</button>
+        <div id="error"></div>
+      </form>
+    </section>
+    <section>
+      <h3>Is this safe to use on a secret Gist?</h3>
+      <p>Yes! The URL to the gist is stored in an
+        <a href="https://gist.github.com/noahsilas/7ada9087cf3642446caf98963a4fd666">URI
+        fragment</a> which is never transmitted to the server. The JS code running here
+        is deliberately small so you can inspect it and see that it makes no requests
+        except to Github to get your linked gist.
+      <p>
+    </section>
   </div>
 </div>
 <div class="controls">
