@@ -102,6 +102,10 @@ function load(url) {
 };
 
 window.addEventListener('hashchange', (evt) => {
+  if ((window.location.hash || '').length < 2) {
+    window.location.reload();
+  }
+
   load(window.location.hash.slice(1));
 })
 
@@ -109,6 +113,8 @@ window.addEventListener('load', () => {
   if (window.location.hash) {
     load(window.location.hash.slice(1));
   }
+
+  gistUrl.focus();
 
   document.getElementById('form').addEventListener('submit', (e) => {
     e.preventDefault();
