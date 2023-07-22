@@ -1,0 +1,110 @@
+<html>
+<head>
+<style>
+/* Thanks Solarized for nice colors
+   https://ethanschoonover.com/solarized/
+ */
+:root {
+  --base03: #002b36;
+  --base00: #657b83;
+  --base0: #839496;
+  --base3: #fdf6e3;
+  --red: #dc322f;
+  --blue: #268bd2;
+  --cyan: #2aa198;
+  --green: #859900;
+
+  /* default dark */
+  --background: var(--base03);
+  --body-text: var(--base0);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: var(--base3);
+    --body-text: var(--base00);
+  }
+}
+
+.red { color: var(--red); }
+.green { color: var(--green); }
+.blue { color: var(--blue); }
+.cyan { color: var(--cyan); }
+.reset { color: var(--body-text); }
+
+html {
+  background-color: var(--background);
+  color: var(--body-text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+pre {
+  /* Nice font via: https://qwtel.com/posts/software/the-monospaced-system-ui-css-font-stack/ */
+  font-family: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
+    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
+    "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+}
+
+</style>
+<script>
+function replacePrefix(str, prefix, replacement) {
+  return str.startsWith(prefix) ? `${replacement}${str.slice(prefix.length)}` : str;
+}
+
+function load(url) {
+  // convert to "raw" github URL
+  url = replacePrefix(url, 'https://gist.github.com', 'https://gist.githubusercontent.com')
+  if (!url.includes('/raw')) { url += '/raw' }
+
+  if (!url.startsWith('https://gist.githubusercontent.com')) {
+    console.log('Bad URL', url);
+    return;
+  }
+
+  fetch(url).then(response => response.text()).then((content) => {
+    const $app = document.getElementById('app');
+
+    const value = content
+      // don't treat content from the page as html
+      .replaceAll('<', ' &lt;')
+      .replaceAll('>', ' &gt;')
+      // the stupidest possible way to render these ansi color escapes.
+      // Relies on the browser to auto-close all the spans at the end of
+      // the document for us 😅
+      .replaceAll('\u001b[31m', '<span class="red">')
+      .replaceAll('\u001b[32m', '<span class="green">')
+      .replaceAll('\u001b[34m', '<span class="blue">')
+      .replaceAll('\u001b[36m', '<span class="cyan">')
+      .replaceAll('\u001b[39m', '<span class="reset">');
+    $app.innerHTML = `<pre>${value}</pre>`;
+  });
+};
+
+window.addEventListener('hashchange', (evt) => {
+  load(window.location.hash.slice(1));
+})
+
+window.addEventListener('load', () => {
+  if (window.location.hash) {
+    load(window.location.hash.slice(1));
+  }
+
+  document.getElementById('form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    window.location.hash = gistUrl.value;
+  });
+})
+</script>
+</head>
+<body>
+<div id="app">
+  <h2>ANSI Escape Code color renderer</h2>
+  <form id="form">
+    <label>Gist URL<br><input id="gistUrl" name="gistUrl" /></label>
+    <button>Go</button>
+  </form>
+</div>
+</body>
+</html>
