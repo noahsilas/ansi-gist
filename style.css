@@ -53,7 +53,7 @@ body { margin: 0; }
 
 a { color: var(--blue); }
 
-code, pre {
+code, pre, #gistContent {
   /* Nice font via: https://qwtel.com/posts/software/the-monospaced-system-ui-css-font-stack/ */
   font-family: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
     "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
@@ -87,29 +87,53 @@ section + section {
 #gistContent {
   min-width: min(calc(100vw - var(--app-padding) * 2), 60rem);
   border: 1px solid var(--border-color);
-  padding: 0 2rem;
   flex-shrink: 0;
+  white-space: pre;
+  border-spacing: 0;
 }
 
 #gistContent:empty {
   display: none;
 }
 
+#gistContent .lineNumber {
+  user-select: none;
+  padding: 0 .4rem;
+  background-color: var(--background-highlight);
+  text-align: right;
+}
+
+#gistContent .line {
+  padding: 0 1rem;
+}
+
 #gistContent:empty + .instructions {
   display: block;
 }
 
-.controls {
+#gistContent:empty ~ #controls {
+  display: none;
+}
+
+#controls {
   position: fixed;
   bottom: 40px;
   right: 40px;
   user-select: none;
 }
 
-#back { text-decoration: none; }
-#back:not([data-hash]) { display: none; }
+#controls .control {
+  cursor: pointer;
+}
+
+.back { text-decoration: none; }
+#controls:not([data-hash]) { display: none; }
 
 #error {
   color: var(--red);
   margin: .25rem 0;
+}
+
+body:not([data-show-line-numbers]) .lineNumber {
+  display: none;
 }

@@ -30,19 +30,20 @@ function load(url) {
   document.title = `Colorize gist - ${url}`
 
   fetch(rawUrl).then(response => response.text()).then((content) => {
-    const value = content
+    $gistContent.innerHTML = content
       // don't treat content from the page as html
       .replaceAll('<', ' &lt;')
       .replaceAll('>', ' &gt;')
       // the stupidest possible way to render these ansi color escapes.
-      // Relies on the browser to auto-close all the spans at the end of
-      // the document for us 😅
+      // Relies on the browser to auto-close all the spans for us 😅
       .replaceAll('\u001b[31m', '<span class="red">')
       .replaceAll('\u001b[32m', '<span class="green">')
       .replaceAll('\u001b[34m', '<span class="blue">')
       .replaceAll('\u001b[36m', '<span class="cyan">')
-      .replaceAll('\u001b[39m', '<span class="reset">');
-    $gistContent.innerHTML = `<pre>${value}</pre>`;
+      .replaceAll('\u001b[39m', '<span class="reset">')
+      .split('\n')
+      .map((line, idx) => `<tr><td class="lineNumber">${idx+1}</td><td class="line">${line}</td></tr>`)
+      .join('\n');
   });
 };
 
@@ -52,18 +53,22 @@ window.addEventListener('hashchange', (evt) => {
   }
 
   load(window.location.hash.slice(1));
-  $back = document.getElementById('back');
-  $back.setAttribute('data-hash', window.location.hash)
+  $controls = document.getElementById('controls');
+  $controls.setAttribute('data-hash', window.location.hash)
 })
 
 window.addEventListener('load', () => {
   if (window.location.hash) {
     load(window.location.hash.slice(1));
-    $back = document.getElementById('back');
-    $back.setAttribute('data-hash', window.location.hash)
+    $controls = document.getElementById('controls');
+    $controls.setAttribute('data-hash', window.location.hash)
   }
 
   gistUrl.focus();
+
+  document.getElementById('toggleLineNumbers').addEventListener('click', (e) => {
+    document.body.toggleAttribute('data-show-line-numbers');
+  })
 
   document.getElementById('form').addEventListener('submit', (e) => {
     e.preventDefault();
@@ -72,9 +77,9 @@ window.addEventListener('load', () => {
 })
 </script>
 </head>
-<body>
+<body data-show-line-numbers>
 <div class="app">
-  <div id="gistContent"></div>
+  <table id="gistContent"></table>
   <div class="instructions">
     <section>
       <h2>ANSI escape code color renderer</h2>
@@ -104,9 +109,10 @@ window.addEventListener('load', () => {
       <p>
     </section>
   </div>
-</div>
-<div class="controls">
-  <a href="#" id="back">&#x1f519;</a>
+  <div id="controls">
+    <a href="#" class="back">&#x1f519;</a>
+    <span id="toggleLineNumbers" class="control">🔢</span>
+  </div>
 </div>
 </div>
 </body>
