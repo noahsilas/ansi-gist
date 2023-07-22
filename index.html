@@ -64,6 +64,11 @@ code {
 .instructions {
   margin: auto;
   max-width: 60rem;
+  display: none;
+}
+
+#gistContent:empty + .instructions {
+  display: block;
 }
 
 .controls {
@@ -91,6 +96,8 @@ function rawGistUrl(url) {
 }
 
 function load(url) {
+  const $gistContent = document.getElementById('gistContent');
+  $gistContent.innerHTML = "";
   const rawUrl = rawGistUrl(url);
 
   if (!rawUrl) {
@@ -99,8 +106,6 @@ function load(url) {
   }
 
   fetch(rawUrl).then(response => response.text()).then((content) => {
-    const $app = document.getElementById('app');
-
     const value = content
       // don't treat content from the page as html
       .replaceAll('<', ' &lt;')
@@ -113,7 +118,7 @@ function load(url) {
       .replaceAll('\u001b[34m', '<span class="blue">')
       .replaceAll('\u001b[36m', '<span class="cyan">')
       .replaceAll('\u001b[39m', '<span class="reset">');
-    $app.innerHTML = `<pre>${value}</pre>`;
+    $gistContent.innerHTML = `<pre>${value}</pre>`;
   });
 };
 
@@ -145,6 +150,7 @@ window.addEventListener('load', () => {
 </head>
 <body>
 <div id="app">
+  <div id="gistContent"></div>
   <div class="instructions">
     <h2>ANSI escape code color renderer</h2>
     <p>
