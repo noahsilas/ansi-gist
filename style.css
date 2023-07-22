@@ -6,8 +6,10 @@
 :root {
   --base03: #002b36;
   --base02: #073642;
+  --base01: #586e75;
   --base00: #657b83;
   --base0: #839496;
+  --base1: #93a1a1;
   --base2: #eee8d5;
   --base3: #fdf6e3;
   --red: #dc322f;
@@ -15,10 +17,13 @@
   --cyan: #2aa198;
   --green: #859900;
 
+  --app-padding: 1rem;
+
   /* default dark */
   --background: var(--base03);
   --background-highlight: var(--base02);
   --body-text: var(--base0);
+  --border-color: var(--base01);
 }
 
 @media (prefers-color-scheme: light) {
@@ -26,6 +31,7 @@
     --background: var(--base3);
     --background-highlight: var(--base2);
     --body-text: var(--base00);
+    --border-color: var(--base1);
   }
 }
 
@@ -65,9 +71,27 @@ section + section {
   margin-top: 2rem;
 }
 
+.app {
+  display: flex;
+  justify-content: center;
+  min-width: max-content;
+  padding: var(--app-padding);
+}
+
 .instructions {
   margin: auto;
   max-width: 60rem;
+  display: none;
+}
+
+#gistContent {
+  min-width: min(calc(100vw - var(--app-padding) * 2), 60rem);
+  border: 1px solid var(--border-color);
+  padding: 0 2rem;
+  flex-shrink: 0;
+}
+
+#gistContent:empty {
   display: none;
 }
 
