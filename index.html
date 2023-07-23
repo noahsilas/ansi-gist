@@ -130,12 +130,13 @@ function load(url) {
     const parts = [
       renderLineStart(),
       htmlSafeContent.replaceAll(
-        /\n|\u001b\[(\d+(?:;\d+)*)m/ug,
+        /\n|\u001b\[([\d;]*)m/ug,
         (match, g1) => {
           if (match === '\n') {
             return renderLineEnd() + renderLineStart();
           }
           g1.split(';')
+            .map(x => x || '0')
             .filter(code => code in CODES)
             .forEach(code => {
               style = Object.assign(style, CODES[code])
