@@ -16,6 +16,75 @@ function rawGistUrl(url) {
   return url;
 }
 
+const defaultStyle = {
+  color: 'default',
+  background: 'default',
+  bold: false,
+  dim: false,
+  italic: false,
+  underline: false,
+  blink: false,
+  invert: false,
+  hidden: false,
+  strikethrough: false,
+}
+
+CODES = {
+  0: defaultStyle, // reset
+  1: { bold: true },
+  2: { dim: true },
+  3: { italic: true },
+  4: { underline: true },
+  5: { blink: true },
+  7: { invert: true },
+  8: { hidden: true },
+  9: { strikethrough: true },
+
+  22: { bold: false, dim: false },
+  23: { italic: false },
+  24: { underline: false },
+  25: { blinking: false },
+  27: { invert: false },
+  28: { hidden: false },
+  29: { strikethrough: false },
+
+  30: { color: 'black' },
+  31: { color: 'red' },
+  32: { color: 'green' },
+  33: { color: 'yellow' },
+  34: { color: 'blue' },
+  35: { color: 'magenta' },
+  36: { color: 'cyan' },
+  37: { color: 'white' },
+  39: { color: 'default' },
+
+  40: { background: 'black' },
+  41: { background: 'red' },
+  42: { background: 'green' },
+  43: { background: 'yellow' },
+  44: { background: 'blue' },
+  45: { background: 'magenta' },
+  46: { background: 'cyan' },
+  47: { background: 'white' },
+  49: { background: 'default' },
+}
+
+function renderSpanStart(style) {
+  const classNames = [style.color, `bg-${style.background}`];
+  if (style.bold) { classNames.push('bold'); }
+  if (style.dim) { classNames.push('dim'); }
+  if (style.italic) { classNames.push('italic'); }
+  if (style.invert) { classNames.push('invert'); }
+  if (style.hidden) { classNames.push('hidden'); }
+
+  // css #hax - these are both controlled by `text-decoration` so handling both is special
+  if (style.underline && style.strikethrough) { classNames.push('understrike'); }
+  else if (style.underline) { classNames.push('underline'); }
+  else if (style.strikethrough) { classNames.push('strikethrough'); }
+
+  return `<span class="ansi ${classNames.join(' ')}">`;
+}
+
 function load(url) {
   const $gistContent = document.getElementById('gistContent');
   $gistContent.innerHTML = "";
@@ -30,20 +99,37 @@ function load(url) {
   document.title = `Colorize gist - ${url}`
 
   fetch(rawUrl).then(response => response.text()).then((content) => {
-    $gistContent.innerHTML = content
-      // don't treat content from the page as html
+    let style = { ...defaultStyle };
+    let lineNumber = 1;
+
+    renderLineStart = () => `<tr><td class="lineNumber">${lineNumber++}</td><td class="line">${renderSpanStart(style)}`
+    renderLineEnd = () => `</span></td></tr>`
+
+    const htmlSafeContent = content
       .replaceAll('<', ' &lt;')
       .replaceAll('>', ' &gt;')
-      // the stupidest possible way to render these ansi color escapes.
-      // Relies on the browser to auto-close all the spans for us 😅
-      .replaceAll('\u001b[31m', '<span class="red">')
-      .replaceAll('\u001b[32m', '<span class="green">')
-      .replaceAll('\u001b[34m', '<span class="blue">')
-      .replaceAll('\u001b[36m', '<span class="cyan">')
-      .replaceAll('\u001b[39m', '<span class="reset">')
-      .split('\n')
-      .map((line, idx) => `<tr><td class="lineNumber">${idx+1}</td><td class="line">${line}</td></tr>`)
-      .join('\n');
+
+    const parts = [
+      renderLineStart(),
+      htmlSafeContent.replaceAll(
+        /\n|\u001b\[(\d+(?:;\d+)*)m/ug,
+        (match, g1) => {
+          if (match === '\n') {
+            return renderLineEnd() + renderLineStart();
+          }
+          g1.split(';')
+            .filter(code => code in CODES)
+            .forEach(code => {
+              style = Object.assign(style, CODES[code])
+            });
+          return `</span>${renderSpanStart(style)}`;
+        }
+      ),
+      renderLineEnd(),
+    ]
+
+    $gistContent.innerHTML = parts.join('');
+
   });
 };
 
