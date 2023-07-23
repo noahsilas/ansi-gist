@@ -54,48 +54,50 @@
 .ansi.italic { font-style: italic; }
 .ansi.underline { text-decoration: underline; }
 .ansi.blink { }
-.ansi.invert { }
+.ansi.invert { } /* handled with color swaps below */
 .ansi.hidden { }
 .ansi.strikethrough { text-decoration: line-through; }
 .ansi.understrike { text-decoration: underline line-through; }
 
-.ansi.black { color: var(--black)}
-.ansi.red { color: var(--red); }
-.ansi.green { color: var(--green); }
-.ansi.yellow { color: var(--yellow); }
-.ansi.blue { color: var(--blue); }
-.ansi.magenta { color: var(--magenta); }
-.ansi.cyan { color: var(--cyan); }
-.ansi.white { color: var(--white); }
+.ansi.black, .ansi.bg-black.invert { color: var(--black)}
+.ansi.red, .ansi.bg-red.invert { color: var(--red); }
+.ansi.green, .ansi.bg-green.invert { color: var(--green); }
+.ansi.yellow, .ansi.bg-yellow.invert { color: var(--yellow); }
+.ansi.blue, .ansi.bg-blue.invert { color: var(--blue); }
+.ansi.magenta, .ansi.bg-magenta.invert { color: var(--magenta); }
+.ansi.cyan, .ansi.bg-cyan.invert { color: var(--cyan); }
+.ansi.white, .ansi.bg-white.invert { color: var(--white); }
 .ansi.default { color: var(--body-text); }
+.ansi.bg-default.invert { color: var(--background); }
 
-.ansi.bg-black { background-color: var(--black)}
-.ansi.bg-red { background-color: var(--red); }
-.ansi.bg-green { background-color: var(--green); }
-.ansi.bg-yellow { background-color: var(--yellow); }
-.ansi.bg-blue { background-color: var(--blue); }
-.ansi.bg-magenta { background-color: var(--magenta); }
-.ansi.bg-cyan { background-color: var(--cyan); }
-.ansi.bg-white { background-color: var(--white); }
+.ansi.bg-black, .ansi.black.invert { background-color: var(--black)}
+.ansi.bg-red, .ansi.red.invert { background-color: var(--red); }
+.ansi.bg-green, .ansi.green.invert { background-color: var(--green); }
+.ansi.bg-yellow, .ansi.yellow.invert { background-color: var(--yellow); }
+.ansi.bg-blue, .ansi.blue.invert { background-color: var(--blue); }
+.ansi.bg-magenta, .ansi.magenta.invert { background-color: var(--magenta); }
+.ansi.bg-cyan, .ansi.cyan.invert { background-color: var(--cyan); }
+.ansi.bg-white, .ansi.white.invert { background-color: var(--white); }
 .ansi.bg-default { background-color: var(--background); }
+.ansi.default.invert { background-color: var(--body-text); }
 
-.ansi.brightBlack { color: var(--bright-black)}
-.ansi.brightRed { color: var(--bright-red); }
-.ansi.brightGreen { color: var(--bright-green); }
-.ansi.brightYellow { color: var(--bright-yellow); }
-.ansi.brightBlue { color: var(--bright-blue); }
-.ansi.brightMagenta { color: var(--bright-magenta); }
-.ansi.brightCyan { color: var(--bright-cyan); }
-.ansi.brightWhite { color: var(--bright-white); }
+.ansi.brightBlack, .ansi.bg-brightBlack.invert  { color: var(--bright-black)}
+.ansi.brightRed, .ansi.bg-brightRed.invert  { color: var(--bright-red); }
+.ansi.brightGreen, .ansi.bg-brightGreen.invert  { color: var(--bright-green); }
+.ansi.brightYellow, .ansi.bg-brightYellow.invert  { color: var(--bright-yellow); }
+.ansi.brightBlue, .ansi.bg-brightBlue.invert  { color: var(--bright-blue); }
+.ansi.brightMagenta, .ansi.bg-brightMagenta.invert  { color: var(--bright-magenta); }
+.ansi.brightCyan, .ansi.bg-brightCyan.invert  { color: var(--bright-cyan); }
+.ansi.brightWhite, .ansi.bg-brightWhite.invert  { color: var(--bright-white); }
 
-.ansi.bg-brightBlack { background-color: var(--bright-black)}
-.ansi.bg-brightRed { background-color: var(--bright-red); }
-.ansi.bg-brightGreen { background-color: var(--bright-green); }
-.ansi.bg-brightYellow { background-color: var(--bright-yellow); }
-.ansi.bg-brightBlue { background-color: var(--bright-blue); }
-.ansi.bg-brightMagenta { background-color: var(--bright-magenta); }
-.ansi.bg-brightCyan { background-color: var(--bright-cyan); }
-.ansi.bg-brightWhite { background-color: var(--bright-white); }
+.ansi.bg-brightBlack, .ansi.brightBlack.invert  { background-color: var(--bright-black)}
+.ansi.bg-brightRed, .ansi.brightRed.invert  { background-color: var(--bright-red); }
+.ansi.bg-brightGreen, .ansi.brightGreen.invert  { background-color: var(--bright-green); }
+.ansi.bg-brightYellow, .ansi.brightYellow.invert  { background-color: var(--bright-yellow); }
+.ansi.bg-brightBlue, .ansi.brightBlue.invert  { background-color: var(--bright-blue); }
+.ansi.bg-brightMagenta, .ansi.brightMagenta.invert  { background-color: var(--bright-magenta); }
+.ansi.bg-brightCyan, .ansi.brightCyan.invert  { background-color: var(--bright-cyan); }
+.ansi.bg-brightWhite, .ansi.brightWhite.invert  { background-color: var(--bright-white); }
 
 html {
   background-color: var(--background);
