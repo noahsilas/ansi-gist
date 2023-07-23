@@ -150,6 +150,9 @@ section + section {
   border-spacing: 0;
 }
 
+#gistContent tr:first-child td { padding-top: 0.5rem; }
+#gistContent tr:last-child td { padding-bottom: 0.5rem; }
+
 #gistContent:empty {
   display: none;
 }
