@@ -130,7 +130,7 @@ function load(url) {
     const parts = [
       renderLineStart(),
       htmlSafeContent.replaceAll(
-        /\n|\u001b\[([\d;]*)m/ug,
+        /\n|\x1b\[([\d;]*)m/g,
         (match, g1) => {
           if (match === '\n') {
             return renderLineEnd() + renderLineStart();
