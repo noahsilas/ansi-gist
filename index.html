@@ -103,6 +103,39 @@ function renderSpanStart(style) {
   return `<span class="ansi ${classNames.join(' ')}">`;
 }
 
+function ansiRender(content) {
+  let style = { ...defaultStyle };
+  let lineNumber = 1;
+
+  renderLineStart = () => `<tr><td class="lineNumber">${lineNumber++}</td><td class="line">${renderSpanStart(style)}`
+  renderLineEnd = () => `</span></td></tr>`
+
+  const htmlSafeContent = content
+    .replaceAll('<', ' &lt;')
+    .replaceAll('>', ' &gt;')
+
+  const parts = [
+    renderLineStart(),
+    htmlSafeContent.replaceAll(
+      /\n|\x1b\[([\d;]*)m/g,
+      (match, g1) => {
+        if (match === '\n') {
+          return renderLineEnd() + renderLineStart();
+        }
+        g1.split(';')
+          .map(x => x || '0')
+          .filter(code => code in CODES)
+          .forEach(code => {
+            style = Object.assign(style, CODES[code])
+          });
+        return `</span>${renderSpanStart(style)}`;
+      }
+    ),
+    renderLineEnd(),
+  ];
+  return parts.join('');
+}
+
 function load(url) {
   const $gistContent = document.getElementById('gistContent');
   $gistContent.innerHTML = "";
@@ -117,38 +150,7 @@ function load(url) {
   document.title = `Colorize gist - ${url}`
 
   fetch(rawUrl).then(response => response.text()).then((content) => {
-    let style = { ...defaultStyle };
-    let lineNumber = 1;
-
-    renderLineStart = () => `<tr><td class="lineNumber">${lineNumber++}</td><td class="line">${renderSpanStart(style)}`
-    renderLineEnd = () => `</span></td></tr>`
-
-    const htmlSafeContent = content
-      .replaceAll('<', ' &lt;')
-      .replaceAll('>', ' &gt;')
-
-    const parts = [
-      renderLineStart(),
-      htmlSafeContent.replaceAll(
-        /\n|\x1b\[([\d;]*)m/g,
-        (match, g1) => {
-          if (match === '\n') {
-            return renderLineEnd() + renderLineStart();
-          }
-          g1.split(';')
-            .map(x => x || '0')
-            .filter(code => code in CODES)
-            .forEach(code => {
-              style = Object.assign(style, CODES[code])
-            });
-          return `</span>${renderSpanStart(style)}`;
-        }
-      ),
-      renderLineEnd(),
-    ]
-
-    $gistContent.innerHTML = parts.join('');
-
+    $gistContent.innerHTML = ansiRender(content)
   });
 };
 
